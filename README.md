@@ -1,3 +1,4 @@
+```text
 src/main/java/com/yourname/aireview/
 ├── AiReviewApplication.java
 ├── controller/
