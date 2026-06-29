@@ -1,3 +1,51 @@
 spring:
+  config:
+    import: optional:application-secrets.yml
+
   application:
     name: agentic-code-review
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/vectordb
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  ai:
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY}
+      chat:
+        options:
+          model: claude-sonnet-4-5
+          temperature: 0.2
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 384   # match your embedding model
+
+github:
+  webhook:
+    secret: ${GITHUB_WEBHOOK_SECRET}
+  repo: sanjanakancharla/agentic-code-review
+  bot:
+    token: ${GITHUB_BOT_TOKEN}
+    review-event: COMMENT   # COMMENT for now; REQUEST_CHANGES later once you trust the agents
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.sanjana.agentic_code_review: DEBUG
